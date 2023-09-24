@@ -145,21 +145,6 @@ jobs:
             cat kubernetes/deployment.yml
             echo "######"
             cat kubernetes/service.yml
-      - run:
-          name: Restart image
-          command: |
-            kubectl get service > service.txt
-            if grep -q 'my-new-angular-app' service.txt; then
-              kubectl describe service my-new-angular-app > capstone.txt
-              if grep -q "role=green" capstone.txt; then
-                echo 'export COLOR=blue' >> "$BASH_ENV"
-              else
-                echo 'export COLOR=green' >> "$BASH_ENV"
-              fi
-            else
-              echo 'export COLOR=blue' >> "$BASH_ENV"
-            fi
-            source "$BASH_ENV"
       - kubernetes/create-or-update-resource:
           get-rollout-status: true
           resource-file-path: "kubernetes/deployment.yml"
