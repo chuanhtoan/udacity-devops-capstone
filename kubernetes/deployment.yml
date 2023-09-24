@@ -15,7 +15,7 @@ spec:
         role: $COLOR
     spec:
       containers:
-        - image: toanca1/my-new-angular-app:latest
+        - image: chuanhtoan/my-new-angular-app:latest
           name: my-new-angular-app
           imagePullPolicy: Always
           ports:
