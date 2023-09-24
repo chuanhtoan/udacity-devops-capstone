@@ -193,4 +193,3 @@ workflows:
           cluster-name: "EKSClusterCapstone"
           requires:
             - build-frontend
-            - deploy-infras
