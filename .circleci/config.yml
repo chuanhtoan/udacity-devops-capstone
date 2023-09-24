@@ -137,6 +137,15 @@ jobs:
             chmod +x envsubst
             sudo mv envsubst /usr/local/bin
       - run:
+          name: Replace variable
+          command: |
+            envsubst < kubernetes/deployment.yml > kubernetes/deployment.yml.temp && cp -f kubernetes/deployment.yml.temp kubernetes/deployment.yml
+            envsubst < kubernetes/service.yml > kubernetes/service.yml.temp && cp -f kubernetes/service.yml.temp kubernetes/service.yml
+            echo "######"
+            cat kubernetes/deployment.yml
+            echo "######"
+            cat kubernetes/service.yml
+      - run:
           name: Restart image
           command: |
             kubectl get service > service.txt
@@ -151,15 +160,6 @@ jobs:
               echo 'export COLOR=blue' >> "$BASH_ENV"
             fi
             source "$BASH_ENV"
-      - run:
-          name: Replace variable
-          command: |
-            envsubst < kubernetes/deployment.yml > kubernetes/deployment.yml.temp && cp -f kubernetes/deployment.yml.temp kubernetes/deployment.yml
-            envsubst < kubernetes/service.yml > kubernetes/service.yml.temp && cp -f kubernetes/service.yml.temp kubernetes/service.yml
-            echo "######"
-            cat kubernetes/deployment.yml
-            echo "######"
-            cat kubernetes/service.yml
       - kubernetes/create-or-update-resource:
           get-rollout-status: true
           resource-file-path: "kubernetes/deployment.yml"
