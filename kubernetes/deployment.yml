@@ -1,0 +1,30 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: my-new-angular-app-$COLOR
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: my-new-angular-app
+      role: $COLOR
+  template:
+    metadata:
+      labels:
+        app: my-new-angular-app
+        role: $COLOR
+    spec:
+      containers:
+        - image: toanca1/my-new-angular-app:latest
+          name: my-new-angular-app
+          imagePullPolicy: Always
+          ports:
+            - containerPort: 80
+          resources:
+            requests:
+              memory: "64Mi"
+              cpu: "250m"
+            limits:
+              memory: "1024Mi"
+              cpu: "500m"
+      restartPolicy: Always
