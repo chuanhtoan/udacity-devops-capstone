@@ -123,6 +123,8 @@ jobs:
       cluster-name:
         description: Name of the EKS cluster
         type: string
+      aws-profile:
+        type: string
     steps:
       - checkout
       - install_awscli
@@ -201,6 +203,7 @@ workflows:
             - lint-frontend
       - deploy-frontend:
           cluster-name: "EKSClusterCapstone"
+          aws-profile: "default"
           requires:
             - build-frontend
             - deploy-infras
