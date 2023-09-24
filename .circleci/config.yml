@@ -61,9 +61,22 @@ jobs:
           command: |
             aws cloudformation deploy \
             --template-file infras/infras.yml \
-            --parameter-overrides $(jq -r '.[] | [.ParameterKey, .ParameterValue] | "\(.[0])=\(.[1])"' ./infras/infras-params.json) \
-            --stack-name << parameters.stack-name >> \
+            --parameter-overrides file://infras/infras-params.json \
+            --stack-name capstone \
             --capabilities "CAPABILITY_IAM" "CAPABILITY_NAMED_IAM"
+      - destroy-environment
+
+  lint-frontend:
+    docker:
+      - image: node:13.8.0
+    steps:
+      - checkout
+      - run:
+          name: Check lint code
+          command: |
+            cd my-new-angular-app
+            npm install
+            npm run test
 
 workflows:
   capstone:
@@ -73,3 +86,4 @@ workflows:
           stack-name: ${STACK_NAME}
           requires:
             - lint-infras
+      - lint-frontend
