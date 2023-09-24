@@ -120,10 +120,6 @@ workflows:
   capstone:
     jobs:
       - lint-infras
-      - deploy-infras:
-          stack-name: ${STACK_NAME}
-          requires:
-            - lint-infras
       - lint-frontend
       - build-frontend:
           requires:
