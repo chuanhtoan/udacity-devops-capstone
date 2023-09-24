@@ -62,7 +62,7 @@ jobs:
             aws cloudformation deploy \
             --template-file infras/infras.yml \
             --parameter-overrides file://infras/infras-params.json \
-            --stack-name capstone \
+            --stack-name << parameters.stack-name >> \
             --capabilities "CAPABILITY_IAM" "CAPABILITY_NAMED_IAM"
       - destroy-environment
 
