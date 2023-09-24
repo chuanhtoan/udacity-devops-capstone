@@ -123,7 +123,8 @@ jobs:
       cluster-name:
         description: Name of the EKS cluster
         type: string
-      aws-profile:
+      aws-region:
+        description: Region of AWS account
         type: string
     steps:
       - checkout
@@ -131,9 +132,9 @@ jobs:
       - kubernetes/install:
           kubectl-version: v1.22.0
       - run:
-          name: Test cluster
+          name: Update Kubeconfig
           command: |
-            aws eks update-kubeconfig --region us-west-2 --name EKSClusterCapstone
+            aws eks update-kubeconfig --region << parameters.aws-region >> --name << parameters.cluster-name >>
             kubectl get services
       - run:
           name: Install envsubst
@@ -202,7 +203,7 @@ workflows:
             - lint-frontend
       - deploy-frontend:
           cluster-name: "EKSClusterCapstone"
-          aws-profile: "default"
+          aws-region: ${AWS_REGION}
           requires:
             - build-frontend
             - deploy-infras
