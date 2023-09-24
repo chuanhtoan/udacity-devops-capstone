@@ -131,11 +131,30 @@ jobs:
       - kubernetes/install:
           kubectl-version: v1.22.0
       - run:
+          name: Test cluster
+          command: |
+            kubectl get services
+      - run:
           name: Install envsubst
           command: |
             curl -L https://github.com/a8m/envsubst/releases/download/v1.2.0/envsubst-`uname -s`-`uname -m` -o envsubst
             chmod +x envsubst
             sudo mv envsubst /usr/local/bin
+      - run:
+          name: Restart image
+          command: |
+            kubectl get service > service.txt
+            if grep -q 'my-new-angular-app' service.txt; then
+              kubectl describe service my-new-angular-app > capstone.txt
+              if grep -q "role=green" capstone.txt; then
+                echo 'export COLOR=blue' >> "$BASH_ENV"
+              else
+                echo 'export COLOR=green' >> "$BASH_ENV"
+              fi
+            else
+              echo 'export COLOR=blue' >> "$BASH_ENV"
+            fi
+            source "$BASH_ENV"
       - run:
           name: Replace variable
           command: |
