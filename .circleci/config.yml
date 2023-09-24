@@ -130,10 +130,9 @@ jobs:
       - install_awscli
       - kubernetes/install:
           kubectl-version: v1.22.0
-      - aws-eks/update-kubeconfig-with-authenticator:
-          cluster-name: << parameters.cluster-name >>
       - run:
           command: |
+            aws configure list-profiles
             kubectl get services
           name: Test cluster
       - run:
